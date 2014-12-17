@@ -1,0 +1,27 @@
+SELECT CONCAT_WS(' ',a.name,a.last_name) AS 'Full Name', SUM(ma.fee) AS 'Total Fee' FROM actors a
+JOIN actors_movies ma ON ma.actors_id = a.id
+WHERE a.date_of_birth BETWEEN CURDATE() - INTERVAL 60 YEAR and CURDATE() - INTERVAL 40 YEAR
+GROUP BY a.id
+
+
+SELECT s.title AS 'Studio Name', CONCAT_WS(' ',a.name,a.last_name) AS 'Full Name', COUNT(m.id) AS 'Films Count' 
+FROM studio s
+JOIN movies_studios ms ON ms.studios_id = s.id
+JOIN movies m ON ms.movies_id = m.id
+JOIN actors_movies am ON am.movies_id = m.id
+JOIN actors a ON am.actors_id = a.id
+WHERE s.title = s.title
+GROUP BY s.id,a.id
+
+SELECT CONCAT_WS(' ',a.name,a.last_name) AS 'Full Name' FROM actors a
+GROUP BY a.last_name
+HAVING COUNT(a.last_name) = 1;
+
+SELECT s.title AS 'Studio Name', COUNT(m.id) AS 'Films Count', COUNT(am.fee) AS 'Fee Count', SUM(am.fee) AS "Fee Sum", AVG(am.fee) AS 'Average Fee'
+FROM studio s
+JOIN movies_studios ms ON ms.studios_id = s.id
+JOIN movies m ON m.id = ms.movies_id 
+JOIN actors_movies am ON am.movies_id = m.id
+WHERE m.year BETWEEN year(CURDATE() - INTERVAL 10 YEAR) AND year(CURDATE())
+GROUP BY s.title
+
